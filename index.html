@@ -1,0 +1,2551 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Akram Sweets</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      :root {
+        --crimson: #8b1a1a;
+        --gold: #c9a84c;
+        --cream: #fdf8f0;
+        --dark: #1a0a0a;
+        --border: #f0e4cc;
+      }
+      body {
+        font-family: "Inter", sans-serif;
+        background: var(--cream);
+        color: var(--dark);
+        min-height: 100vh;
+      }
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(18px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @keyframes popIn {
+        from {
+          opacity: 0;
+          transform: scale(0.93);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+      @keyframes toastIn {
+        from {
+          opacity: 0;
+          transform: translateX(40px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+      @keyframes bounce {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-6px);
+        }
+      }
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateX(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+      .fade-up {
+        animation: fadeUp 0.4s ease both;
+      }
+      .pop-in {
+        animation: popIn 0.35s ease both;
+      }
+      .slide-in {
+        animation: slideIn 0.4s ease both;
+      }
+      .as-btn {
+        font-family: "Inter", sans-serif;
+        cursor: pointer;
+        transition: all 0.18s;
+        border: none;
+      }
+      .as-btn:active {
+        transform: scale(0.97);
+      }
+      .as-card {
+        background: #fff;
+        border-radius: 16px;
+        border: 1px solid var(--border);
+        overflow: hidden;
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+      }
+      .as-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 32px rgba(139, 26, 26, 0.1);
+      }
+      .as-inp {
+        font-family: "Inter", sans-serif;
+        font-size: 14px;
+        padding: 12px 16px;
+        border: 1.5px solid #e8d5b0;
+        border-radius: 10px;
+        width: 100%;
+        outline: none;
+        background: #fff;
+        color: var(--dark);
+        transition: border 0.2s;
+      }
+      .as-inp:focus {
+        border-color: var(--crimson);
+      }
+      .serif {
+        font-family: "Playfair Display", serif;
+      }
+      #root {
+        min-height: 100vh;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+      const { useState, useEffect, useCallback } = React;
+
+      const MENU = [
+        {
+          id: 1,
+          cat: "Sweets",
+          name: "Baklava",
+          price: 3.5,
+          em: "🍯",
+          desc: "Crispy filo with honey and pistachios",
+          popular: true,
+        },
+        {
+          id: 2,
+          cat: "Sweets",
+          name: "Basbusa Qishta",
+          price: 3.5,
+          em: "🎂",
+          desc: "Semolina cake with cream filling",
+          popular: true,
+        },
+        {
+          id: 3,
+          cat: "Sweets",
+          name: "Basbusa Cocoa",
+          price: 3.5,
+          em: "🍫",
+          desc: "Chocolate semolina delight",
+        },
+        {
+          id: 4,
+          cat: "Sweets",
+          name: "Basbusa Coconut",
+          price: 3.5,
+          em: "🥥",
+          desc: "Semolina with coconut flakes",
+        },
+        {
+          id: 5,
+          cat: "Sweets",
+          name: "Hariza",
+          price: 3.5,
+          em: "🍮",
+          desc: "Traditional sweet semolina pudding",
+          popular: true,
+        },
+        {
+          id: 6,
+          cat: "Sweets",
+          name: "Balxa Alsham",
+          price: 3.5,
+          em: "🧁",
+          desc: "Levantine creamy pastry",
+        },
+        {
+          id: 7,
+          cat: "Sweets",
+          name: "Macmuul",
+          price: 3.5,
+          em: "🫐",
+          desc: "Date-filled shortbread cookies",
+        },
+        {
+          id: 8,
+          cat: "Sweets",
+          name: "Biscuit Cake",
+          price: 3.5,
+          em: "🍪",
+          desc: "Homemade layered biscuit cake",
+        },
+        {
+          id: 9,
+          cat: "Sweets",
+          name: "Kunafa",
+          price: 4.5,
+          em: "🧀",
+          desc: "Classic cheese kunafa with rose syrup",
+          popular: true,
+        },
+        {
+          id: 10,
+          cat: "Cakes",
+          name: "Slice Cake",
+          price: 2,
+          em: "🎂",
+          desc: "Chef daily slice selection",
+        },
+        {
+          id: 11,
+          cat: "Cakes",
+          name: "Cheesecake",
+          price: 3,
+          em: "🍰",
+          desc: "New York style creamy cheesecake",
+          popular: true,
+        },
+        {
+          id: 12,
+          cat: "Cakes",
+          name: "Cupcake",
+          price: 1,
+          em: "🧁",
+          desc: "Freshly frosted mini cupcake",
+        },
+        {
+          id: 13,
+          cat: "Cakes",
+          name: "Chocolate Cake",
+          price: 4,
+          em: "🍫",
+          desc: "Rich layered dark chocolate cake",
+          popular: true,
+        },
+        {
+          id: 14,
+          cat: "Cakes",
+          name: "Birthday Cake",
+          price: 15,
+          em: "🎉",
+          desc: "Custom decorated celebration cake",
+        },
+        {
+          id: 15,
+          cat: "Cakes",
+          name: "Red Velvet",
+          price: 4,
+          em: "❤️",
+          desc: "Classic red velvet with cream cheese",
+        },
+        {
+          id: 16,
+          cat: "Coffee & Tea",
+          name: "Tea",
+          price: 1,
+          em: "🍵",
+          desc: "Fresh brewed black tea",
+        },
+        {
+          id: 17,
+          cat: "Coffee & Tea",
+          name: "Espresso",
+          price: 1,
+          em: "☕",
+          desc: "Rich double shot espresso",
+        },
+        {
+          id: 18,
+          cat: "Coffee & Tea",
+          name: "Americano",
+          price: 1,
+          em: "☕",
+          desc: "Espresso diluted with hot water",
+        },
+        {
+          id: 19,
+          cat: "Coffee & Tea",
+          name: "Mint Tea",
+          price: 1.5,
+          em: "🌿",
+          desc: "Fresh mint herbal infusion",
+        },
+        {
+          id: 20,
+          cat: "Coffee & Tea",
+          name: "Cappuccino",
+          price: 1.5,
+          em: "☕",
+          desc: "Espresso with steamed milk foam",
+          popular: true,
+        },
+        {
+          id: 21,
+          cat: "Coffee & Tea",
+          name: "Macchiato",
+          price: 1.5,
+          em: "☕",
+          desc: "Espresso with a dash of milk",
+        },
+        {
+          id: 22,
+          cat: "Coffee & Tea",
+          name: "Latte",
+          price: 1.5,
+          em: "🥛",
+          desc: "Smooth espresso with steamed milk",
+          popular: true,
+        },
+        {
+          id: 23,
+          cat: "Coffee & Tea",
+          name: "Masala Tea",
+          price: 1.5,
+          em: "🫖",
+          desc: "Spiced chai with warm aromatics",
+        },
+        {
+          id: 24,
+          cat: "Coffee & Tea",
+          name: "Dawa Tea",
+          price: 1.5,
+          em: "🍋",
+          desc: "Kenyan ginger lemon honey tea",
+        },
+        {
+          id: 25,
+          cat: "Coffee & Tea",
+          name: "Iced Coffee",
+          price: 2,
+          em: "🧊",
+          desc: "Cold brew poured over ice",
+        },
+        {
+          id: 26,
+          cat: "Coffee & Tea",
+          name: "Frappe",
+          price: 2.5,
+          em: "🥤",
+          desc: "Blended iced coffee with cream",
+          popular: true,
+        },
+        {
+          id: 27,
+          cat: "Fresh Juice",
+          name: "Akram Cocktail",
+          price: 3,
+          em: "🍹",
+          desc: "Our signature tropical blend",
+          popular: true,
+        },
+        {
+          id: 28,
+          cat: "Fresh Juice",
+          name: "Ananas",
+          price: 3,
+          em: "🍍",
+          desc: "Pure fresh pineapple juice",
+        },
+        {
+          id: 29,
+          cat: "Fresh Juice",
+          name: "Isbarmuuto",
+          price: 1.5,
+          em: "🫙",
+          desc: "Somali sweet tamarind drink",
+        },
+        {
+          id: 30,
+          cat: "Fresh Juice",
+          name: "Lemon Mint",
+          price: 2,
+          em: "🍋",
+          desc: "Fresh lemon with garden mint",
+          popular: true,
+        },
+        {
+          id: 31,
+          cat: "Fresh Juice",
+          name: "Liin",
+          price: 1.5,
+          em: "🍈",
+          desc: "Refreshing fresh lime cooler",
+        },
+        {
+          id: 32,
+          cat: "Fresh Juice",
+          name: "Mango",
+          price: 2,
+          em: "🥭",
+          desc: "Pure fresh mango juice",
+        },
+        {
+          id: 33,
+          cat: "Fresh Juice",
+          name: "Mushakal",
+          price: 1.5,
+          em: "🍹",
+          desc: "Mixed tropical fruits blend",
+        },
+        {
+          id: 34,
+          cat: "Fresh Juice",
+          name: "Qaro",
+          price: 1.5,
+          em: "🥤",
+          desc: "Traditional Somali cooler",
+        },
+        {
+          id: 35,
+          cat: "Fresh Juice",
+          name: "Strawberry",
+          price: 3,
+          em: "🍓",
+          desc: "Fresh strawberry smoothie",
+          popular: true,
+        },
+        {
+          id: 36,
+          cat: "Fresh Juice",
+          name: "Orange Juice",
+          price: 3,
+          em: "🍊",
+          desc: "Freshly squeezed orange",
+        },
+        {
+          id: 37,
+          cat: "Fresh Juice",
+          name: "Avocado Shake",
+          price: 3.5,
+          em: "🥑",
+          desc: "Creamy avocado smoothie",
+          popular: true,
+        },
+        {
+          id: 38,
+          cat: "Food",
+          name: "Philly Chicken",
+          price: 5,
+          em: "🥪",
+          desc: "Chicken with peppers and cheese sauce",
+          popular: true,
+        },
+        {
+          id: 39,
+          cat: "Food",
+          name: "Chicken Sandwich",
+          price: 4,
+          em: "🥙",
+          desc: "Grilled chicken in soft bun",
+        },
+        {
+          id: 40,
+          cat: "Food",
+          name: "French Fries",
+          price: 2,
+          em: "🍟",
+          desc: "Crispy golden fries",
+        },
+        {
+          id: 41,
+          cat: "Food",
+          name: "Caesar Salad",
+          price: 5,
+          em: "🥗",
+          desc: "Romaine with Caesar dressing",
+        },
+        {
+          id: 42,
+          cat: "Food",
+          name: "Crispy Chicken",
+          price: 5,
+          em: "🍗",
+          desc: "Fried crispy chicken pieces",
+          popular: true,
+        },
+        {
+          id: 43,
+          cat: "Food",
+          name: "Chicken Nuggets",
+          price: 5,
+          em: "🍗",
+          desc: "Tender juicy nuggets with fries",
+        },
+        {
+          id: 44,
+          cat: "Food",
+          name: "Sheesh Daawuuq",
+          price: 5,
+          em: "🍢",
+          desc: "Somali-style chicken skewers",
+          popular: true,
+        },
+        {
+          id: 45,
+          cat: "Food",
+          name: "Chicken Fahita",
+          price: 5,
+          em: "🌯",
+          desc: "Chicken wrap with grilled peppers",
+        },
+        {
+          id: 46,
+          cat: "Food",
+          name: "Francisco Sandwich",
+          price: 5,
+          em: "🥖",
+          desc: "Sourdough chicken sandwich",
+        },
+        {
+          id: 47,
+          cat: "Food",
+          name: "Beef Burger",
+          price: 6,
+          em: "🍔",
+          desc: "Juicy beef with lettuce and tomato",
+          popular: true,
+        },
+        {
+          id: 48,
+          cat: "Food",
+          name: "Club Sandwich",
+          price: 5,
+          em: "🥪",
+          desc: "Triple-decker chicken and egg",
+        },
+        {
+          id: 49,
+          cat: "Food",
+          name: "Chicken Pasta",
+          price: 6,
+          em: "🍝",
+          desc: "Creamy chicken pasta",
+        },
+        {
+          id: 50,
+          cat: "Food",
+          name: "Spring Rolls",
+          price: 3,
+          em: "🥟",
+          desc: "Crispy vegetable spring rolls",
+        },
+        {
+          id: 51,
+          cat: "Food",
+          name: "Onion Rings",
+          price: 2.5,
+          em: "🧅",
+          desc: "Golden battered onion rings",
+        },
+        {
+          id: 52,
+          cat: "Food",
+          name: "Grilled Sandwich",
+          price: 4,
+          em: "🥪",
+          desc: "Toasted with cheese and veggies",
+        },
+        {
+          id: 53,
+          cat: "Extras",
+          name: "Baklava Topping",
+          price: 1.5,
+          em: "🍯",
+          desc: "Add baklava as topping",
+        },
+        {
+          id: 54,
+          cat: "Extras",
+          name: "Caramel Shot",
+          price: 0.5,
+          em: "🍮",
+          desc: "Add caramel flavor",
+        },
+        {
+          id: 55,
+          cat: "Extras",
+          name: "Vanilla Shot",
+          price: 0.5,
+          em: "🍦",
+          desc: "Add vanilla flavor",
+        },
+        {
+          id: 56,
+          cat: "Extras",
+          name: "Hazelnut Shot",
+          price: 0.5,
+          em: "🌰",
+          desc: "Add hazelnut flavor",
+        },
+        {
+          id: 57,
+          cat: "Extras",
+          name: "Espresso Shot",
+          price: 0.5,
+          em: "☕",
+          desc: "Extra espresso shot",
+        },
+      ];
+
+      const CATS = ["All", ...[...new Set(MENU.map((m) => m.cat))]];
+
+      const ls = {
+        get: (k) => {
+          try {
+            return JSON.parse(localStorage.getItem("as_" + k));
+          } catch {
+            return null;
+          }
+        },
+        set: (k, v) => localStorage.setItem("as_" + k, JSON.stringify(v)),
+      };
+
+      function useToast() {
+        const [toasts, setToasts] = useState([]);
+        const addToast = useCallback((msg, type = "ok") => {
+          const id = Date.now();
+          setToasts((p) => [...p, { id, msg, type }]);
+          setTimeout(
+            () => setToasts((p) => p.filter((t) => t.id !== id)),
+            3200,
+          );
+        }, []);
+        return { toasts, addToast };
+      }
+
+      function Toasts({ toasts }) {
+        return (
+          <div
+            style={{
+              position: "fixed",
+              top: 16,
+              right: 16,
+              zIndex: 9999,
+              display: "flex",
+              flexDirection: "column",
+              gap: 8,
+              maxWidth: 290,
+            }}
+          >
+            {toasts.map((t) => (
+              <div
+                key={t.id}
+                style={{
+                  background: t.type === "err" ? "#8B1A1A" : "#1A5C2A",
+                  color: "#fff",
+                  padding: "12px 18px",
+                  borderRadius: 12,
+                  fontSize: 13,
+                  fontWeight: 600,
+                  animation: "toastIn 0.3s ease both",
+                  boxShadow: "0 4px 20px rgba(0,0,0,0.2)",
+                }}
+              >
+                {t.type === "err" ? "✕ " : "✓ "}
+                {t.msg}
+              </div>
+            ))}
+          </div>
+        );
+      }
+
+      function Logo({ size = 36 }) {
+        return (
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <div
+              style={{
+                width: size,
+                height: size,
+                background: "linear-gradient(135deg,#8B1A1A,#C9A84C)",
+                borderRadius: "50%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: size * 0.46,
+                flexShrink: 0,
+              }}
+            >
+              🍰
+            </div>
+            <div>
+              <div
+                style={{
+                  fontFamily: "'Playfair Display',serif",
+                  fontWeight: 900,
+                  fontSize: size * 0.56,
+                  color: "#8B1A1A",
+                  lineHeight: 1,
+                }}
+              >
+                AKRAM
+              </div>
+              <div
+                style={{
+                  fontFamily: "'Playfair Display',serif",
+                  fontSize: size * 0.3,
+                  color: "#C9A84C",
+                  letterSpacing: 3,
+                  lineHeight: 1,
+                }}
+              >
+                SWEETS
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      function AuthPage({ onLogin, toast }) {
+        const [mode, setMode] = useState("login");
+        const [f, setF] = useState({ name: "", email: "", pw: "", pw2: "" });
+        const [loading, setLoading] = useState(false);
+        const upd = (k) => (e) => setF((p) => ({ ...p, [k]: e.target.value }));
+
+        function submit() {
+          setLoading(true);
+          setTimeout(() => {
+            setLoading(false);
+            if (mode === "login") {
+              const users = ls.get("users") || [];
+              const u = users.find((u) => u.email === f.email && u.pw === f.pw);
+              if (!u) {
+                toast("Invalid email or password", "err");
+                return;
+              }
+              ls.set("session", u);
+              onLogin(u);
+            } else if (mode === "register") {
+              if (!f.name || !f.email || !f.pw) {
+                toast("Please fill all fields", "err");
+                return;
+              }
+              if (f.pw !== f.pw2) {
+                toast("Passwords do not match", "err");
+                return;
+              }
+              const users = ls.get("users") || [];
+              if (users.find((u) => u.email === f.email)) {
+                toast("Email already registered", "err");
+                return;
+              }
+              const u = {
+                id: Date.now(),
+                name: f.name,
+                email: f.email,
+                pw: f.pw,
+                joined: new Date().toISOString(),
+              };
+              ls.set("users", [...users, u]);
+              ls.set("session", u);
+              toast("Welcome to Akram Sweets! 🎉");
+              onLogin(u);
+            } else {
+              toast("Reset link sent to " + f.email + " 📧");
+              setMode("login");
+            }
+          }, 800);
+        }
+
+        const lbl = {
+          fontSize: 12,
+          fontWeight: 600,
+          color: "#666",
+          marginBottom: 4,
+          display: "block",
+          letterSpacing: 0.5,
+        };
+        return (
+          <div
+            style={{
+              minHeight: "100vh",
+              background:
+                "linear-gradient(160deg,#1A0A0A 0%,#3D0E0E 50%,#1A0A0A 100%)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: 20,
+              position: "relative",
+              overflow: "hidden",
+            }}
+          >
+            {[100, 200, 300].map((s, i) => (
+              <div
+                key={i}
+                style={{
+                  position: "absolute",
+                  width: s * 2,
+                  height: s * 2,
+                  borderRadius: "50%",
+                  border:
+                    "1px solid rgba(201,168,76," + (0.06 + i * 0.02) + ")",
+                  top: 10 + i * 22 + "%",
+                  right: 4 + i * 14 + "%",
+                  pointerEvents: "none",
+                }}
+              />
+            ))}
+            <div
+              className="pop-in"
+              style={{
+                background: "#FDF8F0",
+                borderRadius: 22,
+                padding: "36px 32px",
+                width: "100%",
+                maxWidth: 400,
+                boxShadow: "0 24px 80px rgba(0,0,0,0.45)",
+              }}
+            >
+              <div style={{ textAlign: "center", marginBottom: 28 }}>
+                <Logo size={46} />
+                <p
+                  style={{
+                    marginTop: 8,
+                    color: "#999",
+                    fontSize: 12,
+                    letterSpacing: 0.5,
+                  }}
+                >
+                  Home of Sweets · Mogadishu
+                </p>
+              </div>
+              <h2
+                className="serif"
+                style={{ fontSize: 22, color: "#8B1A1A", marginBottom: 4 }}
+              >
+                {mode === "login"
+                  ? "Welcome back"
+                  : mode === "register"
+                    ? "Create account"
+                    : "Reset password"}
+              </h2>
+              <p style={{ color: "#aaa", fontSize: 13, marginBottom: 22 }}>
+                {mode === "login"
+                  ? "Sign in to continue"
+                  : mode === "register"
+                    ? "Join the Akram family"
+                    : "Enter your email below"}
+              </p>
+              <div
+                style={{ display: "flex", flexDirection: "column", gap: 14 }}
+              >
+                {mode === "register" && (
+                  <div>
+                    <label style={lbl}>Full name</label>
+                    <input
+                      className="as-inp"
+                      placeholder="Mohamed Adan Mohamed"
+                      value={f.name}
+                      onChange={upd("name")}
+                    />
+                  </div>
+                )}
+                <div>
+                  <label style={lbl}>Email address</label>
+                  <input
+                    className="as-inp"
+                    type="email"
+                    placeholder="mohamed@gmail.com"
+                    value={f.email}
+                    onChange={upd("email")}
+                  />
+                </div>
+                {mode !== "forgot" && (
+                  <div>
+                    <label style={lbl}>Password</label>
+                    <input
+                      className="as-inp"
+                      type="password"
+                      placeholder="••••••••"
+                      value={f.pw}
+                      onChange={upd("pw")}
+                    />
+                  </div>
+                )}
+                {mode === "register" && (
+                  <div>
+                    <label style={lbl}>Confirm password</label>
+                    <input
+                      className="as-inp"
+                      type="password"
+                      placeholder="••••••••"
+                      value={f.pw2}
+                      onChange={upd("pw2")}
+                    />
+                  </div>
+                )}
+              </div>
+              {mode === "login" && (
+                <div style={{ textAlign: "right", marginTop: 6 }}>
+                  <button
+                    className="as-btn"
+                    onClick={() => setMode("forgot")}
+                    style={{
+                      background: "none",
+                      color: "#C9A84C",
+                      fontSize: 12,
+                      fontWeight: 600,
+                    }}
+                  >
+                    Forgot password?
+                  </button>
+                </div>
+              )}
+              <button
+                className="as-btn"
+                onClick={submit}
+                disabled={loading}
+                style={{
+                  width: "100%",
+                  marginTop: 18,
+                  padding: 14,
+                  background: "linear-gradient(135deg,#8B1A1A,#C9A84C)",
+                  color: "#fff",
+                  borderRadius: 12,
+                  fontSize: 15,
+                  fontWeight: 700,
+                  opacity: loading ? 0.7 : 1,
+                }}
+              >
+                {loading
+                  ? "Please wait..."
+                  : mode === "login"
+                    ? "Sign in →"
+                    : mode === "register"
+                      ? "Create account →"
+                      : "Send reset link →"}
+              </button>
+              <p
+                style={{
+                  textAlign: "center",
+                  marginTop: 16,
+                  fontSize: 13,
+                  color: "#888",
+                }}
+              >
+                {mode === "login" ? (
+                  <span>
+                    No account?{" "}
+                    <button
+                      className="as-btn"
+                      onClick={() => setMode("register")}
+                      style={{
+                        background: "none",
+                        color: "#8B1A1A",
+                        fontWeight: 700,
+                        fontSize: 13,
+                      }}
+                    >
+                      Sign up
+                    </button>
+                  </span>
+                ) : (
+                  <span>
+                    Have an account?{" "}
+                    <button
+                      className="as-btn"
+                      onClick={() => setMode("login")}
+                      style={{
+                        background: "none",
+                        color: "#8B1A1A",
+                        fontWeight: 700,
+                        fontSize: 13,
+                      }}
+                    >
+                      Sign in
+                    </button>
+                  </span>
+                )}
+              </p>
+              <div
+                style={{
+                  marginTop: 18,
+                  padding: "10px 14px",
+                  background: "#FFF8DC",
+                  borderRadius: 10,
+                  fontSize: 12,
+                  color: "#7A5C00",
+                }}
+              >
+                <b>Demo:</b> demo@akram.so / demo123
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      function Navbar({ user, cartCount, page, setPage, onLogout }) {
+        const nav = [
+          ["home", "🏠 Home"],
+          ["menu", "🍽 Menu"],
+          ["cart", "🛒 Cart"],
+          ["orders", "📦 Orders"],
+          ["dashboard", "📊 Dashboard"],
+        ];
+        return (
+          <nav
+            style={{
+              background: "#fff",
+              borderBottom: "3px solid #8B1A1A",
+              position: "sticky",
+              top: 0,
+              zIndex: 100,
+              boxShadow: "0 2px 16px rgba(0,0,0,0.07)",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                padding: "0 20px",
+                height: 66,
+                gap: 8,
+                flexWrap: "wrap",
+              }}
+            >
+              <button
+                className="as-btn"
+                onClick={() => setPage("home")}
+                style={{ background: "none", padding: 0 }}
+              >
+                <Logo size={34} />
+              </button>
+              <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
+                {nav.map(([p, l]) => (
+                  <button
+                    key={p}
+                    className="as-btn"
+                    onClick={() => setPage(p)}
+                    style={{
+                      background: page === p ? "#8B1A1A" : "none",
+                      color: page === p ? "#fff" : "#555",
+                      padding: "8px 13px",
+                      borderRadius: 8,
+                      fontSize: 13,
+                      fontWeight: 600,
+                      position: "relative",
+                    }}
+                  >
+                    {l}
+                    {p === "cart" && cartCount > 0 && (
+                      <span
+                        style={{
+                          position: "absolute",
+                          top: -6,
+                          right: -6,
+                          background: "#C9A84C",
+                          color: "#fff",
+                          borderRadius: "50%",
+                          width: 18,
+                          height: 18,
+                          fontSize: 10,
+                          fontWeight: 700,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          animation: "bounce 1s infinite",
+                        }}
+                      >
+                        {cartCount}
+                      </span>
+                    )}
+                  </button>
+                ))}
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <div
+                  style={{
+                    width: 32,
+                    height: 32,
+                    background: "linear-gradient(135deg,#8B1A1A,#C9A84C)",
+                    borderRadius: "50%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: "#fff",
+                    fontWeight: 700,
+                    fontSize: 14,
+                  }}
+                >
+                  {user.name[0].toUpperCase()}
+                </div>
+                <div style={{ fontSize: 12, lineHeight: 1.4 }}>
+                  <div style={{ fontWeight: 700 }}>
+                    {user.name.split(" ")[0]}
+                  </div>
+                  <button
+                    className="as-btn"
+                    onClick={onLogout}
+                    style={{
+                      background: "none",
+                      color: "#aaa",
+                      fontSize: 11,
+                      padding: 0,
+                    }}
+                  >
+                    Sign out
+                  </button>
+                </div>
+              </div>
+            </div>
+          </nav>
+        );
+      }
+
+      function HomePage({ setPage }) {
+        const popular = MENU.filter((m) => m.popular).slice(0, 6);
+        return (
+          <div>
+            <div
+              style={{
+                background: "linear-gradient(150deg,#1A0A0A,#3D0E0E)",
+                padding: "72px 20px 60px",
+                textAlign: "center",
+                position: "relative",
+                overflow: "hidden",
+              }}
+            >
+              {[...Array(5)].map((_, i) => (
+                <div
+                  key={i}
+                  style={{
+                    position: "absolute",
+                    fontSize: 36 + i * 8,
+                    opacity: 0.04,
+                    top: 8 + i * 14 + "%",
+                    left: 4 + i * 18 + "%",
+                    transform: "rotate(" + i * 40 + "deg)",
+                    pointerEvents: "none",
+                  }}
+                >
+                  🍰
+                </div>
+              ))}
+              <div
+                className="fade-up"
+                style={{ position: "relative", zIndex: 1 }}
+              >
+                <p
+                  style={{
+                    color: "#C9A84C",
+                    fontSize: 13,
+                    fontWeight: 700,
+                    letterSpacing: 4,
+                    textTransform: "uppercase",
+                    marginBottom: 12,
+                  }}
+                >
+                  Welcome to Akram Sweets
+                </p>
+                <h1
+                  className="serif"
+                  style={{
+                    fontSize: "clamp(34px,5vw,64px)",
+                    color: "#fff",
+                    lineHeight: 1.1,
+                    marginBottom: 16,
+                  }}
+                >
+                  Share Quality
+                  <br />
+                  <span style={{ color: "#C9A84C" }}>in Every Bite</span>
+                </h1>
+                <p
+                  style={{
+                    color: "rgba(255,255,255,0.65)",
+                    fontSize: 16,
+                    maxWidth: 500,
+                    margin: "0 auto 30px",
+                    lineHeight: 1.65,
+                  }}
+                >
+                  Where taste and love go hand in hand. Loved by thousands for
+                  our cakes, sweets, coffee and more.
+                </p>
+                <div
+                  style={{
+                    display: "flex",
+                    gap: 12,
+                    justifyContent: "center",
+                    flexWrap: "wrap",
+                  }}
+                >
+                  <button
+                    className="as-btn"
+                    onClick={() => setPage("menu")}
+                    style={{
+                      background: "linear-gradient(135deg,#C9A84C,#A07830)",
+                      color: "#fff",
+                      padding: "15px 32px",
+                      borderRadius: 50,
+                      fontWeight: 700,
+                      fontSize: 15,
+                      boxShadow: "0 6px 20px rgba(201,168,76,0.3)",
+                    }}
+                  >
+                    🍽 View Full Menu
+                  </button>
+                  <a
+                    href="tel:+252617269857"
+                    style={{
+                      background: "rgba(255,255,255,0.08)",
+                      color: "#fff",
+                      border: "1.5px solid rgba(255,255,255,0.18)",
+                      padding: "15px 32px",
+                      borderRadius: 50,
+                      fontSize: 15,
+                      fontWeight: 700,
+                      textDecoration: "none",
+                    }}
+                  >
+                    📞 Call to Order
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div style={{ background: "#8B1A1A", padding: "22px 20px" }}>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(4,1fr)",
+                  gap: 16,
+                  maxWidth: 640,
+                  margin: "0 auto",
+                  textAlign: "center",
+                }}
+              >
+                {[
+                  ["1K+", "Customers"],
+                  ["57+", "Menu Items"],
+                  ["5 Star", "Rating"],
+                  ["2015", "Est."],
+                ].map(([n, l]) => (
+                  <div key={l}>
+                    <div
+                      className="serif"
+                      style={{
+                        fontSize: 28,
+                        color: "#C9A84C",
+                        fontWeight: 900,
+                      }}
+                    >
+                      {n}
+                    </div>
+                    <div
+                      style={{ color: "rgba(255,255,255,0.6)", fontSize: 12 }}
+                    >
+                      {l}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div
+              style={{ padding: "52px 20px", maxWidth: 1100, margin: "0 auto" }}
+            >
+              <div style={{ textAlign: "center", marginBottom: 36 }}>
+                <p
+                  style={{
+                    color: "#C9A84C",
+                    fontSize: 12,
+                    fontWeight: 700,
+                    letterSpacing: 3,
+                    textTransform: "uppercase",
+                    marginBottom: 8,
+                  }}
+                >
+                  Best Sellers
+                </p>
+                <h2
+                  className="serif"
+                  style={{ fontSize: 34, color: "#1A0A0A" }}
+                >
+                  Most Popular Items
+                </h2>
+              </div>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fill,minmax(250px,1fr))",
+                  gap: 20,
+                }}
+              >
+                {popular.map((item) => (
+                  <div key={item.id} className="as-card fade-up">
+                    <div
+                      style={{
+                        background: "linear-gradient(135deg,#FDF0E0,#FAE8CC)",
+                        height: 110,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontSize: 56,
+                      }}
+                    >
+                      {item.em}
+                    </div>
+                    <div style={{ padding: "16px 18px 20px" }}>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          marginBottom: 5,
+                        }}
+                      >
+                        <h3
+                          className="serif"
+                          style={{ fontSize: 17, color: "#1A0A0A" }}
+                        >
+                          {item.name}
+                        </h3>
+                        <span
+                          style={{
+                            background: "#8B1A1A",
+                            color: "#fff",
+                            padding: "4px 10px",
+                            borderRadius: 20,
+                            fontSize: 13,
+                            fontWeight: 700,
+                          }}
+                        >
+                          {"$" + item.price}
+                        </span>
+                      </div>
+                      <p
+                        style={{
+                          color: "#aaa",
+                          fontSize: 13,
+                          lineHeight: 1.5,
+                          marginBottom: 10,
+                        }}
+                      >
+                        {item.desc}
+                      </p>
+                      <span
+                        style={{
+                          background: "#FFF3CD",
+                          color: "#7A5C00",
+                          padding: "3px 10px",
+                          borderRadius: 20,
+                          fontSize: 11,
+                          fontWeight: 600,
+                        }}
+                      >
+                        Popular
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div style={{ textAlign: "center", marginTop: 36 }}>
+                <button
+                  className="as-btn"
+                  onClick={() => setPage("menu")}
+                  style={{
+                    border: "2px solid #8B1A1A",
+                    color: "#8B1A1A",
+                    background: "none",
+                    padding: "13px 38px",
+                    borderRadius: 50,
+                    fontWeight: 700,
+                    fontSize: 14,
+                  }}
+                >
+                  See all {MENU.length} items
+                </button>
+              </div>
+            </div>
+            <div style={{ background: "#1A0A0A", padding: "52px 20px" }}>
+              <h2
+                className="serif"
+                style={{
+                  fontSize: 30,
+                  color: "#fff",
+                  textAlign: "center",
+                  marginBottom: 30,
+                }}
+              >
+                What We Offer
+              </h2>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fill,minmax(160px,1fr))",
+                  gap: 14,
+                  maxWidth: 900,
+                  margin: "0 auto",
+                }}
+              >
+                {[
+                  ["🍯", "Sweets"],
+                  ["🎂", "Cakes"],
+                  ["☕", "Coffee & Tea"],
+                  ["🍹", "Fresh Juice"],
+                  ["🍔", "Food"],
+                ].map(([em, n]) => (
+                  <button
+                    key={n}
+                    className="as-btn"
+                    onClick={() => setPage("menu")}
+                    style={{
+                      background: "rgba(255,255,255,0.05)",
+                      border: "1px solid rgba(201,168,76,0.2)",
+                      borderRadius: 14,
+                      padding: "24px 12px",
+                      color: "#fff",
+                      textAlign: "center",
+                      width: "100%",
+                    }}
+                  >
+                    <div style={{ fontSize: 38, marginBottom: 8 }}>{em}</div>
+                    <div style={{ fontWeight: 600, fontSize: 14 }}>{n}</div>
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div
+              style={{
+                background: "#0D0505",
+                padding: "36px 20px",
+                textAlign: "center",
+              }}
+            >
+              <Logo size={38} />
+              <p
+                style={{
+                  color: "rgba(255,255,255,0.4)",
+                  marginTop: 14,
+                  fontSize: 13,
+                }}
+              >
+                📞{" "}
+                <a href="tel:+252617269857" style={{ color: "#C9A84C" }}>
+                  +252 61 7269857
+                </a>
+              </p>
+              <p
+                style={{
+                  color: "rgba(255,255,255,0.25)",
+                  marginTop: 6,
+                  fontSize: 12,
+                }}
+              >
+                Waaberi, Akram Sweets · Owner: Mohamed Adan Mohamed · Mogadishu,
+                Somalia
+              </p>
+            </div>
+          </div>
+        );
+      }
+
+      function MenuPage({ cart, setCart, toast }) {
+        const [cat, setCat] = useState("All");
+        const [q, setQ] = useState("");
+        const items = MENU.filter(
+          (m) =>
+            (cat === "All" || m.cat === cat) &&
+            (m.name.toLowerCase().includes(q.toLowerCase()) ||
+              m.desc.toLowerCase().includes(q.toLowerCase())),
+        );
+        function add(item) {
+          setCart((p) => {
+            const ex = p.find((i) => i.id === item.id);
+            return ex
+              ? p.map((i) => (i.id === item.id ? { ...i, qty: i.qty + 1 } : i))
+              : [...p, { ...item, qty: 1 }];
+          });
+          toast(item.em + " " + item.name + " added to cart");
+        }
+        return (
+          <div
+            style={{ maxWidth: 1100, margin: "0 auto", padding: "40px 20px" }}
+          >
+            <div style={{ textAlign: "center", marginBottom: 36 }}>
+              <p
+                style={{
+                  color: "#C9A84C",
+                  fontSize: 12,
+                  fontWeight: 700,
+                  letterSpacing: 3,
+                  textTransform: "uppercase",
+                  marginBottom: 8,
+                }}
+              >
+                Our Menu
+              </p>
+              <h1 className="serif" style={{ fontSize: 36, color: "#1A0A0A" }}>
+                Choose Your Favorites
+              </h1>
+            </div>
+            <div
+              style={{
+                position: "relative",
+                maxWidth: 460,
+                margin: "0 auto 28px",
+              }}
+            >
+              <span
+                style={{
+                  position: "absolute",
+                  left: 16,
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  fontSize: 18,
+                }}
+              >
+                🔍
+              </span>
+              <input
+                className="as-inp"
+                placeholder="Search menu..."
+                value={q}
+                onChange={(e) => setQ(e.target.value)}
+                style={{ paddingLeft: 48, borderRadius: 50 }}
+              />
+            </div>
+            <div
+              style={{
+                display: "flex",
+                gap: 8,
+                flexWrap: "wrap",
+                justifyContent: "center",
+                marginBottom: 28,
+              }}
+            >
+              {CATS.map((c) => (
+                <button
+                  key={c}
+                  className="as-btn"
+                  onClick={() => setCat(c)}
+                  style={{
+                    padding: "9px 18px",
+                    borderRadius: 50,
+                    fontSize: 13,
+                    fontWeight: 600,
+                    background: cat === c ? "#8B1A1A" : "#fff",
+                    color: cat === c ? "#fff" : "#555",
+                    border:
+                      cat === c ? "2px solid #8B1A1A" : "2px solid #E8D5B0",
+                  }}
+                >
+                  {c}
+                </button>
+              ))}
+            </div>
+            <p
+              style={{
+                textAlign: "center",
+                color: "#bbb",
+                fontSize: 13,
+                marginBottom: 22,
+              }}
+            >
+              {items.length} items
+            </p>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fill,minmax(230px,1fr))",
+                gap: 18,
+              }}
+            >
+              {items.map((item) => {
+                const inCart = cart.find((i) => i.id === item.id);
+                return (
+                  <div key={item.id} className="as-card">
+                    <div
+                      style={{
+                        background: "linear-gradient(135deg,#FDF0E0,#FAE8CC)",
+                        height: 96,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontSize: 50,
+                        position: "relative",
+                      }}
+                    >
+                      {item.em}
+                      {item.popular && (
+                        <span
+                          style={{
+                            position: "absolute",
+                            top: 7,
+                            right: 7,
+                            background: "#C9A84C",
+                            color: "#fff",
+                            fontSize: 10,
+                            fontWeight: 700,
+                            padding: "2px 8px",
+                            borderRadius: 20,
+                          }}
+                        >
+                          Popular
+                        </span>
+                      )}
+                    </div>
+                    <div style={{ padding: "13px 15px 15px" }}>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          marginBottom: 4,
+                        }}
+                      >
+                        <h3
+                          className="serif"
+                          style={{
+                            fontSize: 15,
+                            color: "#1A0A0A",
+                            flex: 1,
+                            lineHeight: 1.3,
+                          }}
+                        >
+                          {item.name}
+                        </h3>
+                        <span
+                          style={{
+                            fontWeight: 800,
+                            color: "#8B1A1A",
+                            fontSize: 15,
+                            marginLeft: 8,
+                          }}
+                        >
+                          {"$" + item.price}
+                        </span>
+                      </div>
+                      <p
+                        style={{
+                          color: "#bbb",
+                          fontSize: 12,
+                          lineHeight: 1.4,
+                          marginBottom: 10,
+                        }}
+                      >
+                        {item.desc}
+                      </p>
+                      <span
+                        style={{
+                          background: "#F5E6C8",
+                          color: "#7A3A1A",
+                          padding: "2px 8px",
+                          borderRadius: 10,
+                          fontSize: 11,
+                          fontWeight: 600,
+                        }}
+                      >
+                        {item.cat}
+                      </span>
+                      <button
+                        className="as-btn"
+                        onClick={() => add(item)}
+                        style={{
+                          display: "block",
+                          width: "100%",
+                          marginTop: 10,
+                          padding: "10px",
+                          background: inCart ? "#1A5C2A" : "#8B1A1A",
+                          color: "#fff",
+                          borderRadius: 10,
+                          fontSize: 13,
+                          fontWeight: 700,
+                        }}
+                      >
+                        {inCart
+                          ? "In cart (" + inCart.qty + ")"
+                          : "+ Add to cart"}
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            {items.length === 0 && (
+              <div
+                style={{
+                  textAlign: "center",
+                  padding: "70px 0",
+                  color: "#bbb",
+                }}
+              >
+                <div style={{ fontSize: 60, marginBottom: 16 }}>🔍</div>
+                <p style={{ fontSize: 18 }}>No results for {q}</p>
+              </div>
+            )}
+          </div>
+        );
+      }
+
+      function CartPage({ cart, setCart, toast, setPage, addOrder }) {
+        const [phone, setPhone] = useState("");
+        const [addr, setAddr] = useState("");
+        const [busy, setBusy] = useState(false);
+        const upd = (id, d) =>
+          setCart((p) =>
+            p
+              .map((i) =>
+                i.id === id ? { ...i, qty: Math.max(0, i.qty + d) } : i,
+              )
+              .filter((i) => i.qty > 0),
+          );
+        const sub = cart.reduce((s, i) => s + i.price * i.qty, 0);
+        const tax = sub * 0.05;
+        const total = sub + tax;
+        function place() {
+          if (!phone) {
+            toast("Please enter your phone number", "err");
+            return;
+          }
+          setBusy(true);
+          setTimeout(() => {
+            const o = {
+              id:
+                "ORD-" +
+                Math.random().toString(36).substring(2, 8).toUpperCase(),
+              items: [...cart],
+              sub,
+              tax,
+              total,
+              phone,
+              addr,
+              status: "Confirmed",
+              date: new Date().toISOString(),
+            };
+            addOrder(o);
+            setCart([]);
+            setBusy(false);
+            toast("Order placed! " + o.id);
+            setPage("orders");
+          }, 1200);
+        }
+        if (!cart.length)
+          return (
+            <div
+              style={{
+                textAlign: "center",
+                padding: "80px 20px",
+                color: "#bbb",
+              }}
+            >
+              <div style={{ fontSize: 76, marginBottom: 18 }}>🛒</div>
+              <h2
+                className="serif"
+                style={{ fontSize: 26, color: "#1A0A0A", marginBottom: 10 }}
+              >
+                Your cart is empty
+              </h2>
+              <p style={{ marginBottom: 24 }}>Add some items from our menu!</p>
+              <button
+                className="as-btn"
+                onClick={() => setPage("menu")}
+                style={{
+                  background: "#8B1A1A",
+                  color: "#fff",
+                  padding: "14px 32px",
+                  borderRadius: 50,
+                  fontWeight: 700,
+                  fontSize: 14,
+                }}
+              >
+                Browse menu
+              </button>
+            </div>
+          );
+        return (
+          <div
+            style={{ maxWidth: 880, margin: "0 auto", padding: "40px 20px" }}
+          >
+            <h1
+              className="serif"
+              style={{ fontSize: 34, color: "#1A0A0A", marginBottom: 30 }}
+            >
+              Your cart 🛒
+            </h1>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr minmax(270px,310px)",
+                gap: 28,
+              }}
+            >
+              <div>
+                {cart.map((item) => (
+                  <div
+                    key={item.id}
+                    style={{
+                      background: "#fff",
+                      borderRadius: 14,
+                      padding: "14px 18px",
+                      marginBottom: 12,
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 16,
+                      border: "1px solid #F0E4CC",
+                    }}
+                  >
+                    <div style={{ fontSize: 38, flexShrink: 0 }}>{item.em}</div>
+                    <div style={{ flex: 1 }}>
+                      <div
+                        className="serif"
+                        style={{
+                          fontWeight: 700,
+                          fontSize: 16,
+                          color: "#1A0A0A",
+                        }}
+                      >
+                        {item.name}
+                      </div>
+                      <div style={{ color: "#bbb", fontSize: 12 }}>
+                        {"$" + item.price} each
+                      </div>
+                    </div>
+                    <div
+                      style={{ display: "flex", alignItems: "center", gap: 8 }}
+                    >
+                      <button
+                        className="as-btn"
+                        onClick={() => upd(item.id, -1)}
+                        style={{
+                          width: 29,
+                          height: 29,
+                          borderRadius: "50%",
+                          border: "1.5px solid #E8D5B0",
+                          background: "#fff",
+                          fontSize: 17,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        −
+                      </button>
+                      <span
+                        style={{
+                          fontWeight: 700,
+                          fontSize: 16,
+                          minWidth: 22,
+                          textAlign: "center",
+                        }}
+                      >
+                        {item.qty}
+                      </span>
+                      <button
+                        className="as-btn"
+                        onClick={() => upd(item.id, +1)}
+                        style={{
+                          width: 29,
+                          height: 29,
+                          borderRadius: "50%",
+                          border: "1.5px solid #8B1A1A",
+                          background: "#8B1A1A",
+                          color: "#fff",
+                          fontSize: 17,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        +
+                      </button>
+                    </div>
+                    <div
+                      style={{
+                        fontWeight: 800,
+                        color: "#8B1A1A",
+                        fontSize: 16,
+                        minWidth: 48,
+                        textAlign: "right",
+                      }}
+                    >
+                      {"$" + (item.price * item.qty).toFixed(2)}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div
+                style={{
+                  background: "#fff",
+                  borderRadius: 16,
+                  padding: 24,
+                  border: "1px solid #F0E4CC",
+                  position: "sticky",
+                  top: 76,
+                  height: "fit-content",
+                }}
+              >
+                <h3
+                  className="serif"
+                  style={{ fontSize: 20, marginBottom: 20 }}
+                >
+                  Order summary
+                </h3>
+                <input
+                  className="as-inp"
+                  placeholder="Phone number *"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  style={{ marginBottom: 10 }}
+                />
+                <input
+                  className="as-inp"
+                  placeholder="Delivery address"
+                  value={addr}
+                  onChange={(e) => setAddr(e.target.value)}
+                  style={{ marginBottom: 20 }}
+                />
+                {[
+                  ["Subtotal", "$" + sub.toFixed(2)],
+                  ["Tax 5%", "$" + tax.toFixed(2)],
+                ].map(([l, v]) => (
+                  <div
+                    key={l}
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      marginBottom: 8,
+                      fontSize: 14,
+                    }}
+                  >
+                    <span style={{ color: "#888" }}>{l}</span>
+                    <span style={{ fontWeight: 600 }}>{v}</span>
+                  </div>
+                ))}
+                <div
+                  style={{
+                    borderTop: "1.5px solid #F0E4CC",
+                    paddingTop: 14,
+                    display: "flex",
+                    justifyContent: "space-between",
+                    marginBottom: 20,
+                  }}
+                >
+                  <span style={{ fontWeight: 800, fontSize: 18 }}>Total</span>
+                  <span
+                    style={{ fontWeight: 900, fontSize: 20, color: "#8B1A1A" }}
+                  >
+                    {"$" + total.toFixed(2)}
+                  </span>
+                </div>
+                <button
+                  className="as-btn"
+                  onClick={place}
+                  disabled={busy}
+                  style={{
+                    width: "100%",
+                    padding: 14,
+                    background: "linear-gradient(135deg,#8B1A1A,#C9A84C)",
+                    color: "#fff",
+                    borderRadius: 12,
+                    fontSize: 15,
+                    fontWeight: 700,
+                    opacity: busy ? 0.7 : 1,
+                  }}
+                >
+                  {busy ? "Placing order..." : "Place order 🎉"}
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      function OrdersPage({ orders }) {
+        const SC = {
+          Confirmed: "#1A5C2A",
+          Preparing: "#856404",
+          Ready: "#0D47A1",
+          Delivered: "#555",
+          Cancelled: "#8B1A1A",
+        };
+        if (!orders.length)
+          return (
+            <div
+              style={{
+                textAlign: "center",
+                padding: "80px 20px",
+                color: "#bbb",
+              }}
+            >
+              <div style={{ fontSize: 76, marginBottom: 18 }}>📦</div>
+              <h2
+                className="serif"
+                style={{ fontSize: 26, color: "#1A0A0A", marginBottom: 10 }}
+              >
+                No orders yet
+              </h2>
+              <p>Place your first order from our menu!</p>
+            </div>
+          );
+        return (
+          <div
+            style={{ maxWidth: 880, margin: "0 auto", padding: "40px 20px" }}
+          >
+            <h1
+              className="serif"
+              style={{ fontSize: 34, color: "#1A0A0A", marginBottom: 30 }}
+            >
+              My orders 📦
+            </h1>
+            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+              {[...orders].reverse().map((o) => (
+                <div
+                  key={o.id}
+                  className="slide-in"
+                  style={{
+                    background: "#fff",
+                    borderRadius: 14,
+                    padding: 22,
+                    border: "1px solid #F0E4CC",
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      flexWrap: "wrap",
+                      gap: 10,
+                      marginBottom: 14,
+                    }}
+                  >
+                    <div>
+                      <div
+                        className="serif"
+                        style={{
+                          fontWeight: 700,
+                          fontSize: 18,
+                          color: "#1A0A0A",
+                        }}
+                      >
+                        {o.id}
+                      </div>
+                      <div style={{ color: "#bbb", fontSize: 12 }}>
+                        {new Date(o.date).toLocaleString()}
+                      </div>
+                    </div>
+                    <span
+                      style={{
+                        background: SC[o.status] || "#555",
+                        color: "#fff",
+                        padding: "5px 14px",
+                        borderRadius: 20,
+                        fontSize: 12,
+                        fontWeight: 700,
+                      }}
+                    >
+                      {o.status}
+                    </span>
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexWrap: "wrap",
+                      gap: 7,
+                      marginBottom: 12,
+                    }}
+                  >
+                    {o.items.map((i) => (
+                      <span
+                        key={i.id}
+                        style={{
+                          background: "#FDF8F0",
+                          border: "1px solid #F0E4CC",
+                          padding: "4px 11px",
+                          borderRadius: 20,
+                          fontSize: 12,
+                        }}
+                      >
+                        {i.em} {i.name} x{i.qty}
+                      </span>
+                    ))}
+                  </div>
+                  {o.phone && (
+                    <div
+                      style={{ fontSize: 12, color: "#666", marginBottom: 3 }}
+                    >
+                      📞 {o.phone}
+                    </div>
+                  )}
+                  {o.addr && (
+                    <div
+                      style={{ fontSize: 12, color: "#666", marginBottom: 10 }}
+                    >
+                      📍 {o.addr}
+                    </div>
+                  )}
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "flex-end",
+                      alignItems: "center",
+                      gap: 8,
+                      borderTop: "1px solid #F0E4CC",
+                      paddingTop: 12,
+                    }}
+                  >
+                    <span style={{ color: "#888", fontSize: 13 }}>Total:</span>
+                    <span
+                      style={{
+                        fontWeight: 900,
+                        fontSize: 20,
+                        color: "#8B1A1A",
+                      }}
+                    >
+                      {"$" + o.total.toFixed(2)}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      }
+
+      function Dashboard({ orders }) {
+        const rev = orders.reduce((s, o) => s + o.total, 0);
+        const qty = orders.reduce(
+          (s, o) => s + o.items.reduce((a, i) => a + i.qty, 0),
+          0,
+        );
+        const topItems = MENU.map((m) => ({
+          ...m,
+          sold: orders.reduce(
+            (s, o) =>
+              s +
+              o.items
+                .filter((i) => i.id === m.id)
+                .reduce((a, i) => a + i.qty, 0),
+            0,
+          ),
+        }))
+          .filter((m) => m.sold > 0)
+          .sort((a, b) => b.sold - a.sold)
+          .slice(0, 5);
+        const catRev = [
+          "Sweets",
+          "Cakes",
+          "Coffee & Tea",
+          "Fresh Juice",
+          "Food",
+        ].map((c) => ({
+          c,
+          v: orders.reduce(
+            (s, o) =>
+              s +
+              o.items
+                .filter((i) => i.cat === c)
+                .reduce((a, i) => a + i.price * i.qty, 0),
+            0,
+          ),
+        }));
+        const maxCat = Math.max(...catRev.map((x) => x.v), 1);
+        const COLORS = ["#8B1A1A", "#1A5C2A", "#0D47A1", "#856404", "#6A1E6A"];
+        const kpi = [
+          ["📦", "Orders", orders.length, "#8B1A1A"],
+          ["💰", "Revenue", "$" + rev.toFixed(2), "#1A5C2A"],
+          ["🍽", "Items Sold", qty, "#856404"],
+          [
+            "📊",
+            "Avg Order",
+            orders.length ? "$" + (rev / orders.length).toFixed(2) : "$0",
+            "#0D47A1",
+          ],
+        ];
+        return (
+          <div
+            style={{ maxWidth: 1100, margin: "0 auto", padding: "40px 20px" }}
+          >
+            <div style={{ marginBottom: 30 }}>
+              <p
+                style={{
+                  color: "#C9A84C",
+                  fontSize: 12,
+                  fontWeight: 700,
+                  letterSpacing: 3,
+                  textTransform: "uppercase",
+                  marginBottom: 6,
+                }}
+              >
+                Business Dashboard
+              </p>
+              <h1 className="serif" style={{ fontSize: 34, color: "#1A0A0A" }}>
+                Akram Sweets Analytics
+              </h1>
+              <p style={{ color: "#888", fontSize: 13 }}>
+                Owner: Mohamed · {new Date().toLocaleDateString()}
+              </p>
+            </div>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit,minmax(190px,1fr))",
+                gap: 18,
+                marginBottom: 24,
+              }}
+            >
+              {kpi.map(([ic, l, v, col]) => (
+                <div key={l} className="as-card" style={{ padding: 22 }}>
+                  <div style={{ fontSize: 34, marginBottom: 8 }}>{ic}</div>
+                  <div
+                    className="serif"
+                    style={{ fontSize: 28, fontWeight: 900, color: col }}
+                  >
+                    {v}
+                  </div>
+                  <div style={{ color: "#888", fontSize: 12, fontWeight: 500 }}>
+                    {l}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: 22,
+                marginBottom: 22,
+              }}
+            >
+              <div
+                style={{
+                  background: "#fff",
+                  borderRadius: 16,
+                  padding: 22,
+                  border: "1px solid #F0E4CC",
+                }}
+              >
+                <h3
+                  className="serif"
+                  style={{ fontSize: 19, color: "#1A0A0A", marginBottom: 18 }}
+                >
+                  Top Selling Items
+                </h3>
+                {topItems.length === 0 ? (
+                  <p
+                    style={{
+                      color: "#bbb",
+                      textAlign: "center",
+                      padding: "20px 0",
+                    }}
+                  >
+                    No orders yet
+                  </p>
+                ) : (
+                  topItems.map((m, i) => (
+                    <div
+                      key={m.id}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 10,
+                        marginBottom: 12,
+                        padding: "9px 12px",
+                        background: i === 0 ? "#FFF8DC" : "#FDF8F0",
+                        borderRadius: 10,
+                      }}
+                    >
+                      <span
+                        style={{
+                          fontWeight: 900,
+                          color: "#C9A84C",
+                          fontSize: 17,
+                          width: 22,
+                        }}
+                      >
+                        {i + 1}
+                      </span>
+                      <span style={{ fontSize: 24 }}>{m.em}</span>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontWeight: 700, fontSize: 13 }}>
+                          {m.name}
+                        </div>
+                        <div style={{ color: "#bbb", fontSize: 11 }}>
+                          {"$" + m.price + " · " + m.cat}
+                        </div>
+                      </div>
+                      <span
+                        style={{
+                          background: "#8B1A1A",
+                          color: "#fff",
+                          padding: "3px 10px",
+                          borderRadius: 20,
+                          fontSize: 12,
+                          fontWeight: 700,
+                        }}
+                      >
+                        {m.sold} sold
+                      </span>
+                    </div>
+                  ))
+                )}
+              </div>
+              <div
+                style={{
+                  background: "#fff",
+                  borderRadius: 16,
+                  padding: 22,
+                  border: "1px solid #F0E4CC",
+                }}
+              >
+                <h3
+                  className="serif"
+                  style={{ fontSize: 19, color: "#1A0A0A", marginBottom: 18 }}
+                >
+                  Revenue by Category
+                </h3>
+                {catRev.map(({ c, v }, i) => (
+                  <div key={c} style={{ marginBottom: 16 }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        marginBottom: 5,
+                        fontSize: 13,
+                      }}
+                    >
+                      <span style={{ fontWeight: 600 }}>{c}</span>
+                      <span style={{ fontWeight: 700, color: COLORS[i] }}>
+                        {"$" + v.toFixed(2)}
+                      </span>
+                    </div>
+                    <div
+                      style={{
+                        background: "#F0E4CC",
+                        borderRadius: 50,
+                        height: 9,
+                        overflow: "hidden",
+                      }}
+                    >
+                      <div
+                        style={{
+                          background: COLORS[i],
+                          height: "100%",
+                          width: (v / maxCat) * 100 + "%",
+                          borderRadius: 50,
+                          transition: "width 1s ease",
+                        }}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div
+              style={{
+                background: "#fff",
+                borderRadius: 16,
+                padding: 22,
+                border: "1px solid #F0E4CC",
+              }}
+            >
+              <h3
+                className="serif"
+                style={{ fontSize: 19, color: "#1A0A0A", marginBottom: 18 }}
+              >
+                Recent Orders
+              </h3>
+              {orders.length === 0 ? (
+                <p
+                  style={{
+                    color: "#bbb",
+                    textAlign: "center",
+                    padding: "20px 0",
+                  }}
+                >
+                  No orders yet
+                </p>
+              ) : (
+                <div style={{ overflowX: "auto" }}>
+                  <table
+                    style={{
+                      width: "100%",
+                      borderCollapse: "collapse",
+                      fontSize: 13,
+                    }}
+                  >
+                    <thead>
+                      <tr style={{ background: "#FDF8F0" }}>
+                        {["Order ID", "Items", "Total", "Status", "Date"].map(
+                          (h) => (
+                            <th
+                              key={h}
+                              style={{
+                                textAlign: "left",
+                                padding: "11px 14px",
+                                fontWeight: 700,
+                                color: "#666",
+                                borderBottom: "1.5px solid #F0E4CC",
+                              }}
+                            >
+                              {h}
+                            </th>
+                          ),
+                        )}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {[...orders]
+                        .reverse()
+                        .slice(0, 10)
+                        .map((o) => (
+                          <tr
+                            key={o.id}
+                            style={{ borderBottom: "1px solid #F0E4CC" }}
+                          >
+                            <td
+                              style={{
+                                padding: "11px 14px",
+                                fontWeight: 700,
+                                color: "#8B1A1A",
+                              }}
+                            >
+                              {o.id}
+                            </td>
+                            <td style={{ padding: "11px 14px" }}>
+                              {o.items.map((i) => i.em).join(" ")}
+                            </td>
+                            <td
+                              style={{ padding: "11px 14px", fontWeight: 700 }}
+                            >
+                              {"$" + o.total.toFixed(2)}
+                            </td>
+                            <td style={{ padding: "11px 14px" }}>
+                              <span
+                                style={{
+                                  background: "#1A5C2A",
+                                  color: "#fff",
+                                  padding: "2px 9px",
+                                  borderRadius: 20,
+                                  fontSize: 11,
+                                  fontWeight: 700,
+                                }}
+                              >
+                                {o.status}
+                              </span>
+                            </td>
+                            <td style={{ padding: "11px 14px", color: "#bbb" }}>
+                              {new Date(o.date).toLocaleDateString()}
+                            </td>
+                          </tr>
+                        ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+          </div>
+        );
+      }
+
+      function App() {
+        const [user, setUser] = useState(() => ls.get("session"));
+        const [page, setPage] = useState("home");
+        const [cart, setCart] = useState([]);
+        const [orders, setOrders] = useState(() => ls.get("orders") || []);
+        const { toasts, addToast } = useToast();
+
+        useEffect(() => {
+          const users = ls.get("users") || [];
+          if (!users.find((u) => u.email === "demo@akram.so"))
+            ls.set("users", [
+              ...users,
+              {
+                id: 0,
+                name: "Mohamed Adan Mohamed",
+                email: "mohamed@akram.so",
+                pw: "mohamed123",
+                joined: new Date().toISOString(),
+              },
+            ]);
+        }, []);
+
+        useEffect(() => ls.set("orders", orders), [orders]);
+
+        const addOrder = (o) => setOrders((p) => [...p, o]);
+        const logout = () => {
+          ls.set("session", null);
+          setUser(null);
+          setPage("home");
+          setCart([]);
+        };
+        const cartCount = cart.reduce((s, i) => s + i.qty, 0);
+
+        if (!user)
+          return (
+            <>
+              <Toasts toasts={toasts} />
+              <AuthPage
+                onLogin={(u) => {
+                  setUser(u);
+                  setPage("home");
+                }}
+                toast={addToast}
+              />
+            </>
+          );
+
+        const pages = {
+          home: <HomePage setPage={setPage} />,
+          menu: <MenuPage cart={cart} setCart={setCart} toast={addToast} />,
+          cart: (
+            <CartPage
+              cart={cart}
+              setCart={setCart}
+              toast={addToast}
+              setPage={setPage}
+              addOrder={addOrder}
+            />
+          ),
+          orders: <OrdersPage orders={orders} />,
+          dashboard: <Dashboard orders={orders} />,
+        };
+
+        return (
+          <div style={{ minHeight: "100vh", background: "#FDF8F0" }}>
+            <Toasts toasts={toasts} />
+            <Navbar
+              user={user}
+              cartCount={cartCount}
+              page={page}
+              setPage={setPage}
+              onLogout={logout}
+            />
+            <div key={page} className="fade-up">
+              {pages[page] || pages.home}
+            </div>
+          </div>
+        );
+      }
+
+      ReactDOM.render(<App />, document.getElementById("root"));
+    </script>
+  </body>
+</html>
